@@ -37,8 +37,8 @@ namespace Spacepupupu
             this.gfx = gfx;
             this.pos.X = X;
             this.pos.Y = Y;
-            this.speed.X = X;
-            this.speed.Y = Y;
+            this.speed.X = speedX;
+            this.speed.Y = speedY;
         }
         public void Update(GameWindow window)
         {
@@ -53,18 +53,32 @@ namespace Spacepupupu
             }
             if (pos.Y <= window.ClientBounds.Height - gfx.Height && pos.Y >= 0)
             {
-                if (keyboardState.IsKeyDown(Keys.Right))
+                if (keyboardState.IsKeyDown(Keys.Down))
                     pos.Y += speed.Y;
-                if (keyboardState.IsKeyDown(Keys.Left))
+                if (keyboardState.IsKeyDown(Keys.Up))
                     pos.Y -= speed.Y;
             }
             if (pos.X < 0)
                 pos.X = 0;
             if (pos.X > window.ClientBounds.Width - gfx.Width)
             {
-                pos.X
+                pos.X = window.ClientBounds.Width - gfx.Width;
+            }
+            if (pos.Y < 0)
+                pos.Y = 0;
+            
+            if (pos.Y > window.ClientBounds.Height - gfx.Height)
+            {
+                pos.Y = window.ClientBounds.Height - gfx.Height;
             }
 
         }
+
+        public void Draw (SpriteBatch spriteBatch)
+        {
+            spriteBatch.Draw(gfx, pos, Color.White);
+        }
     }
+
+
 }

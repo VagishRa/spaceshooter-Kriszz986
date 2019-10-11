@@ -12,6 +12,8 @@ namespace Spacepupupu
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Player player;
+
 
         public Game1()
         {
@@ -29,11 +31,6 @@ namespace Spacepupupu
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            ship_vector.X = 380;
-            ship_vector.Y = 400;
-
-            ship_speed.X = 40f;
-            ship_speed.Y = 40f;
 
             base.Initialize();
         }
@@ -48,7 +45,7 @@ namespace Spacepupupu
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            ship_teture = this.Content.Load<Texture2D>("ship");
+            player = new Player(Content.Load<Texture2D>("ship"), 380, 400, 10f, 10f);
         }
 
         /// <summary>
@@ -70,55 +67,7 @@ namespace Spacepupupu
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-
-            KeyboardState keyboardState = Keyboard.GetState();
-
-            if (ship_vector.X <= Window.ClientBounds.Width - ship_texture.Width && ship_vector.X >= 0)
-            {
-                if (keyboardState.IsKeyDown(Keys.Right))
-                    ship_vector.X += ship_speed.X;
-                if (keyboardState.IsKeyDown(Keys.Left))
-                    ship_vector.X -= ship_speed.X;
-            }
-
-            if (ship_vector.X <= Window.ClientBounds.Width - ship_texture.Width && ship_vector.X >= 0)
-            {
-                if (keyboardState.IsKeyDown(Keys.D))
-                    ship_vector.X += ship_speed.X;
-                if (keyboardState.IsKeyDown(Keys.A))
-                    ship_vector.X -= ship_speed.X;
-            }
-
-            if (ship_vector.Y <= Window.ClientBounds.Height - ship_texture.Height && ship_vector.Y >= 0)
-            {
-                if (keyboardState.IsKeyDown(Keys.Down))
-                    ship_vector.Y += ship_speed.Y;
-                if (keyboardState.IsKeyDown(Keys.Up))
-                    ship_vector.Y -= ship_speed.Y;
-            }
-
-            if (ship_vector.Y <= Window.ClientBounds.Height - ship_texture.Height && ship_vector.Y >= 0)
-            {
-                if (keyboardState.IsKeyDown(Keys.S))
-                    ship_vector.Y += ship_speed.Y;
-                if (keyboardState.IsKeyDown(Keys.W))
-                    ship_vector.Y -= ship_speed.Y;
-            }
-
-            if (ship_vector.X < 0)
-                ship_vector.X = 0;
-            if (ship_vector.X > Window.ClientBounds.Width - ship_texture.Width)
-            {
-                ship_vector.X = Window.ClientBounds.Width - ship_texture.Width;
-            }
-
-            if (ship_vector.Y < 0)
-                ship_vector.Y = 0;
-            if (ship_vector.Y > Window.ClientBounds.Height - ship_texture.Height)
-            {
-                ship_vector.Y = Window.ClientBounds.Height - ship_texture.Height;
-            }
-
+            player.Update(Window);
             base.Update(gameTime);
         }
 
@@ -132,7 +81,7 @@ namespace Spacepupupu
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            spriteBatch.Draw(ship_teture, ship_vector, Color.White);
+            player.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
