@@ -7,38 +7,14 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Spacepupupu
 {
-    /*
-    class GameObject
+    class Player:GameObject
     {
-        protected Texture2D texture;
-        protected Vector2 vector;
-
-        public GameObject(Texture2D texture, float X, float Y)
-        {
-            this.texture = texture;
-            this.vector.X = X;
-            this.vector.Y = Y;
-        }
-
-        public void Draw(SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(texture, vector, Color.White);
-        }
-    }*/
-
-    class Player
-    {
-        Texture2D gfx; //rymdskeppet grafik
-        Vector2 pos; //rymdskeppet position
         Vector2 speed;
 
-        public Player(Texture2D gfx, float X, float Y, float speedX, float speedY)
+        public Player(Texture2D gfx, float X, float Y, float speedX, float speedY):base(gfx,X,Y)
         {
-            this.gfx = gfx;
-            this.pos.X = X;
-            this.pos.Y = Y;
-            this.speed.X = speedX;
-            this.speed.Y = speedY;
+            this.speed.X = X;
+            this.speed.Y = Y;
         }
         public void Update(GameWindow window)
         {
@@ -53,32 +29,19 @@ namespace Spacepupupu
             }
             if (pos.Y <= window.ClientBounds.Height - gfx.Height && pos.Y >= 0)
             {
-                if (keyboardState.IsKeyDown(Keys.Down))
+                if (keyboardState.IsKeyDown(Keys.Right))
                     pos.Y += speed.Y;
-                if (keyboardState.IsKeyDown(Keys.Up))
+                if (keyboardState.IsKeyDown(Keys.Left))
                     pos.Y -= speed.Y;
             }
             if (pos.X < 0)
                 pos.X = 0;
+
             if (pos.X > window.ClientBounds.Width - gfx.Width)
             {
-                pos.X = window.ClientBounds.Width - gfx.Width;
-            }
-            if (pos.Y < 0)
-                pos.Y = 0;
-            
-            if (pos.Y > window.ClientBounds.Height - gfx.Height)
-            {
-                pos.Y = window.ClientBounds.Height - gfx.Height;
+                pos.X
             }
 
-        }
-
-        public void Draw (SpriteBatch spriteBatch)
-        {
-            spriteBatch.Draw(gfx, pos, Color.White);
         }
     }
-
-
 }
