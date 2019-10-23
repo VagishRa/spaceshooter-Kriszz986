@@ -4,9 +4,15 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
+    <File>C:/Users/user/Documents/GitHub/Spacepupupu/Spacepupupu/Content/enemies/mine.png</File>
+    <File>C:/Users/user/Documents/GitHub/Spacepupupu/Spacepupupu/Content/enemies/tripod.png</File>
+    <File>C:/Users/user/Documents/GitHub/Spacepupupu/Spacepupupu/Content/myFont.spritefont</File>
     <File>C:/Users/user/Documents/GitHub/Spacepupupu/Spacepupupu/Content/ship.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>
 </SourceFileCollection>

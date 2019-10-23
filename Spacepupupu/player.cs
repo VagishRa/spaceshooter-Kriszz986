@@ -7,14 +7,12 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Spacepupupu
 {
-    class Player:GameObject
+    class Player: PhysicalObject
     {
-        Vector2 speed;
+        int points = 0;
 
-        public Player(Texture2D gfx, float X, float Y, float speedX, float speedY):base(gfx,X,Y)
+        public Player(Texture2D gfx, float X, float Y, float speedX, float speedY): base(gfx,X,Y, speedX, speedY)
         {
-            this.speed.X = X;
-            this.speed.Y = Y;
         }
         public void Update(GameWindow window)
         {
@@ -22,26 +20,26 @@ namespace Spacepupupu
 
             if (pos.X <= window.ClientBounds.Width - gfx.Width && pos.X >= 0)
             {
-                if (keyboardState.IsKeyDown(Keys.Right))
+                if (keyboardState.IsKeyDown(Keys.Right)|| keyboardState.IsKeyDown(Keys.D))
                     pos.X += speed.X;
-                if (keyboardState.IsKeyDown(Keys.Left))
+                if (keyboardState.IsKeyDown(Keys.Left)|| keyboardState.IsKeyDown(Keys.A))
                     pos.X -= speed.X;
             }
-            if (pos.Y <= window.ClientBounds.Height - gfx.Height && pos.Y >= 0)
+            if(pos.Y <= window.ClientBounds.Height - gfx.Height && pos.Y >= 0)
             {
-                if (keyboardState.IsKeyDown(Keys.Right))
+                if (keyboardState.IsKeyDown(Keys.Down)|| keyboardState.IsKeyDown(Keys.S))
                     pos.Y += speed.Y;
-                if (keyboardState.IsKeyDown(Keys.Left))
+                if (keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.W))
                     pos.Y -= speed.Y;
             }
             if (pos.X < 0)
                 pos.X = 0;
-
             if (pos.X > window.ClientBounds.Width - gfx.Width)
-            {
-                pos.X
-            }
-
+                pos.X = window.ClientBounds.Width - gfx.Width;
+            if (pos.Y < 0)
+                pos.Y = 0;
+            if (pos.Y > window.ClientBounds.Height - gfx.Height)
+                pos.Y = window.ClientBounds.Height - gfx.Height;
         }
     }
 }

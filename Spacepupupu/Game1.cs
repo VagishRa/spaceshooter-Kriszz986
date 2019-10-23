@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Spacepupupu
 {
@@ -11,6 +14,9 @@ namespace Spacepupupu
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Player player;
+        PrintText printText;
+        List<Enemy> enemies;
 
 
         public Game1()
@@ -29,11 +35,6 @@ namespace Spacepupupu
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            ship_vector.X = 380;
-            ship_vector.Y = 400;
-
-            ship_speed.X = 40f;
-            ship_speed.Y = 40f;
 
             base.Initialize();
         }
@@ -48,7 +49,19 @@ namespace Spacepupupu
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            ship_teture = this.Content.Load<Texture2D>("ship");
+            player = new Player(Content.Load<Texture2D>("ship"), 380, 400, 40f, 40f);
+            printText = new PrintText(Content.Load<SpriteFont>("myFont"));
+            enemies = new List<Enemy>();
+            Random random = new Random();
+            Texture2D tmpSprite = Content.Load<Texture2D>("enemies/mine");
+            for (int i = 0; i <12; i++)
+            {
+                int rndX = random.Next(0, Window.ClientBounds.Width - tmpSprite.Width);
+                int rndY = random.Next(0, Window.ClientBounds.Height / 2);
+                Enemy temp = new Enemy(tmpSprite, rndX, rndY);
+                enemies.Add(temp);
+            }
+
         }
 
         /// <summary>
@@ -69,57 +82,27 @@ namespace Spacepupupu
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-
-
-            KeyboardState keyboardState = Keyboard.GetState();
-
-            if (ship_vector.X <= Window.ClientBounds.Width - ship_texture.Width && ship_vector.X >= 0)
+            player.Update(Window);
+            foreach (Enemy e in enemies.ToList())
             {
-                if (keyboardState.IsKeyDown(Keys.Right))
-                    ship_vector.X += ship_speed.X;
-                if (keyboardState.IsKeyDown(Keys.Left))
-                    ship_vector.X -= ship_speed.X;
-            }
-
-            if (ship_vector.X <= Window.ClientBounds.Width - ship_texture.Width && ship_vector.X >= 0)
-            {
-                if (keyboardState.IsKeyDown(Keys.D))
-                    ship_vector.X += ship_speed.X;
-                if (keyboardState.IsKeyDown(Keys.A))
-                    ship_vector.X -= ship_speed.X;
-            }
-
-            if (ship_vector.Y <= Window.ClientBounds.Height - ship_texture.Height && ship_vector.Y >= 0)
-            {
-                if (keyboardState.IsKeyDown(Keys.Down))
-                    ship_vector.Y += ship_speed.Y;
-                if (keyboardState.IsKeyDown(Keys.Up))
-                    ship_vector.Y -= ship_speed.Y;
-            }
-
-            if (ship_vector.Y <= Window.ClientBounds.Height - ship_texture.Height && ship_vector.Y >= 0)
-            {
-                if (keyboardState.IsKeyDown(Keys.S))
-                    ship_vector.Y += ship_speed.Y;
-                if (keyboardState.IsKeyDown(Keys.W))
-                    ship_vector.Y -= ship_speed.Y;
-            }
-
-            if (ship_vector.X < 0)
-                ship_vector.X = 0;
-            if (ship_vector.X > Window.ClientBounds.Width - ship_texture.Width)
-            {
-                ship_vector.X = Window.ClientBounds.Width - ship_texture.Width;
-            }
-
-            if (ship_vector.Y < 0)
-                ship_vector.Y = 0;
-            if (ship_vector.Y > Window.ClientBounds.Height - ship_texture.Height)
-            {
-                ship_vector.Y = Window.ClientBounds.Height - ship_texture.Height;
+                if (e.IsAlive)
+                    e.Update(Window);
+                else
+                    enemies.Remove(e);
             }
 
             base.Update(gameTime);
+
+            foreach(Enemy e in enemies.ToList())
+            {
+                if (e.IsAlive)
+                {
+                    if (e.CheckCollision(player))
+                        this.Exit();
+                    e.Update(Window);
+                }
+                else enemies.Remove(e);
+            }
         }
 
         /// <summary>
@@ -132,7 +115,10 @@ namespace Spacepupupu
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            spriteBatch.Draw(ship_teture, ship_vector, Color.White);
+            player.Draw(spriteBatch);
+            printText.Print("Test," + enemies.Count, spriteBatch, 0, 0);
+            foreach (Enemy e in enemies)
+                e.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);
